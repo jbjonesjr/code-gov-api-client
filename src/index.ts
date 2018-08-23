@@ -36,6 +36,7 @@ export class CodeGovAPIClient {
   /**
   * This function gets all the agencies on code.gov
   * @name getAgencies
+  * @param {number} [size=10] - the number of search results to return
   * @returns {Object} array of agencies
   * @example
   * client.getAgencies().then(agencies => {
@@ -43,8 +44,8 @@ export class CodeGovAPIClient {
   *   console.log("There are " + count + " agencies on code.gov");
   * });
   */
-  getAgencies(){
-    return fetch(this.BASE + `agencies?api_key=${this.API_KEY}`)
+  getAgencies(size=10){
+    return fetch(this.BASE + `agencies?size=${size}&api_key=${this.API_KEY}`)
       .then(response => response.json())
       .then(data => data.agencies);
   }
@@ -107,7 +108,7 @@ export class CodeGovAPIClient {
    */
   suggest(term="", size=10) {
     if (term && term.length > 2) {
-      let url = this.BASE + `terms?_fulltext=${term}&size=${size}&api_key=${this.API_KEY}`;
+      let url = this.BASE + `terms?term=${term}&size=${size}&api_key=${this.API_KEY}`;
       if (this.DEBUG) console.log("getAgencyRepos: url:", url);
       return fetch(url)
         .then(response => response.json())
