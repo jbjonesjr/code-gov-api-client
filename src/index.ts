@@ -67,7 +67,7 @@ export class CodeGovAPIClient {
     /*
       - permissions.usageType is "openSource" or "governmentWideReuse"
     */
-    let url = this.BASE + `repos?agency.acronym=${agency_id}&size=${size}&sort=name__asc&api_key=${this.API_KEY}`;
+    let url = this.BASE + `repos?agency.acronym=${agency_id}&size=${size}&api_key=${this.API_KEY}`;
     if (this.DEBUG) console.log("getAgencyRepos: url:", url);
     return fetch(url)
       .then(response => response.json())
