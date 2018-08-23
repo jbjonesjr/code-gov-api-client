@@ -44,7 +44,7 @@ export class CodeGovAPIClient {
   * });
   */
   getAgencies(){
-    return fetch(this.BASE + `agencies?api_key=`+this.API_KEY)
+    return fetch(this.BASE + `agencies?api_key=${this.API_KEY}`)
       .then(response => response.json())
       .then(data => data.agencies);
   }
@@ -67,7 +67,7 @@ export class CodeGovAPIClient {
     /*
       - permissions.usageType is "openSource" or "governmentWideReuse"
     */
-    let url = this.BASE + `repos?agency.acronym=${agency_id}&size=${size}&sort=name__asc&api_key={this.API_KEY}`;
+    let url = this.BASE + `repos?agency.acronym=${agency_id}&size=${size}&sort=name__asc&api_key=${this.API_KEY}`;
     if (this.DEBUG) console.log("getAgencyRepos: url:", url);
     return fetch(url)
       .then(response => response.json())
@@ -87,7 +87,7 @@ export class CodeGovAPIClient {
   * });
   */
   getRepoByID(repo_id="") {
-    let url = this.BASE + `repos/${repo_id}?api_key={this.API_KEY}`;
+    let url = this.BASE + `repos/${repo_id}?api_key=${this.API_KEY}`;
     return fetch(url).then(response => response.json());
   }
 
@@ -107,7 +107,7 @@ export class CodeGovAPIClient {
    */
   suggest(term="", size=10) {
     if (term && term.length > 2) {
-      let url = this.BASE + `terms?_fulltext=${term}&size=${size}&api_key={this.API_KEY}`;
+      let url = this.BASE + `terms?_fulltext=${term}&size=${size}&api_key=${this.API_KEY}`;
       if (this.DEBUG) console.log("getAgencyRepos: url:", url);
       return fetch(url)
         .then(response => response.json())
@@ -130,7 +130,7 @@ export class CodeGovAPIClient {
    */
    search(text="", size=10) {
      if (text && text.length > 0) {
-       let url = this.BASE + `repos?q=${text}&size=${size}&api_key={this.API_KEY}`;
+       let url = this.BASE + `repos?q=${text}&size=${size}&api_key=${this.API_KEY}`;
        if (this.DEBUG) console.log("result repos:", url);
        return fetch(url).then(response => response.json());
      }
@@ -147,7 +147,7 @@ export class CodeGovAPIClient {
    * });
    */
   listAll(size=10) {
-       let url = this.BASE + `repos?size=${size}&api_key={this.API_KEY}`;
+       let url = this.BASE + `repos?size=${size}&api_key=${this.API_KEY}`;
        if (this.DEBUG) console.log("get all repos url:", url);
        return fetch(url).then(response => response.json());
    }
