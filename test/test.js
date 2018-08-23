@@ -4,7 +4,7 @@ let CodeGovAPIClient = require("../build/index.js").CodeGovAPIClient;
 console.log("CodeGovAPIClient:", CodeGovAPIClient);
 
 let client = new CodeGovAPIClient({
-  environment: "staging",
+//  environment: "staging",
   debug: true
 });
 

@@ -5,6 +5,7 @@ var CodeGovAPIClient = /** @class */ (function () {
     function CodeGovAPIClient(options) {
         console.log("constructing CodeGovAPIClient");
         this.DEBUG = options && options.debug || false;
+        this.API_KEY = options && options.api_key || 'DEMO_KEY';
         if (options && options.base) {
             this.BASE = options.base;
         }
@@ -15,7 +16,7 @@ var CodeGovAPIClient = /** @class */ (function () {
             this.BASE = 'https://code-api-staging.app.cloud.gov/api/0.1/';
         }
         else {
-            this.BASE = 'https://code-api.app.cloud.gov/api/0.1/';
+            this.BASE = 'https://api.code.gov/';
         }
         if (this.DEBUG)
             console.log("this.BASE:", this.BASE);
@@ -23,6 +24,7 @@ var CodeGovAPIClient = /** @class */ (function () {
     /**
     * This function gets all the agencies on code.gov
     * @name getAgencies
+    * @param {number} [size=10] - the number of search results to return
     * @returns {Object} array of agencies
     * @example
     * client.getAgencies().then(agencies => {
@@ -30,8 +32,9 @@ var CodeGovAPIClient = /** @class */ (function () {
     *   console.log("There are " + count + " agencies on code.gov");
     * });
     */
-    CodeGovAPIClient.prototype.getAgencies = function () {
-        return fetch(this.BASE + "agencies")
+    CodeGovAPIClient.prototype.getAgencies = function (size) {
+        if (size === void 0) { size = 10; }
+        return fetch(this.BASE + ("agencies?size=" + size + "&api_key=" + this.API_KEY))
             .then(function (response) { return response.json(); })
             .then(function (data) { return data.agencies; });
     };
@@ -55,7 +58,7 @@ var CodeGovAPIClient = /** @class */ (function () {
         /*
           - permissions.usageType is "openSource" or "governmentWideReuse"
         */
-        var url = this.BASE + ("repos?agency.acronym=" + agency_id + "&size=" + size + "&sort=name__asc");
+        var url = this.BASE + ("repos?agency.acronym=" + agency_id + "&size=" + size + "&api_key=" + this.API_KEY);
         if (this.DEBUG)
             console.log("getAgencyRepos: url:", url);
         return fetch(url)
@@ -76,7 +79,7 @@ var CodeGovAPIClient = /** @class */ (function () {
     */
     CodeGovAPIClient.prototype.getRepoByID = function (repo_id) {
         if (repo_id === void 0) { repo_id = ""; }
-        var url = this.BASE + ("repos/" + repo_id);
+        var url = this.BASE + ("repos/" + repo_id + "?api_key=" + this.API_KEY);
         return fetch(url).then(function (response) { return response.json(); });
     };
     /**
@@ -97,7 +100,7 @@ var CodeGovAPIClient = /** @class */ (function () {
         if (term === void 0) { term = ""; }
         if (size === void 0) { size = 10; }
         if (term && term.length > 2) {
-            var url = this.BASE + ("terms?_fulltext=" + term + "&size=" + size);
+            var url = this.BASE + ("terms?term=" + term + "&size=" + size + "&api_key=" + this.API_KEY);
             if (this.DEBUG)
                 console.log("getAgencyRepos: url:", url);
             return fetch(url)
@@ -123,11 +126,28 @@ var CodeGovAPIClient = /** @class */ (function () {
         if (text === void 0) { text = ""; }
         if (size === void 0) { size = 10; }
         if (text && text.length > 0) {
-            var url = this.BASE + ("repos?q=" + text + "&size=" + size);
+            var url = this.BASE + ("repos?q=" + text + "&size=" + size + "&api_key=" + this.API_KEY);
             if (this.DEBUG)
                 console.log("result repos:", url);
             return fetch(url).then(function (response) { return response.json(); });
         }
+    };
+    /**
+    * This function lists all of the projects known to code.gov.
+    * @function
+    * @name listAll
+    * @param {number} size - the max number of repositories to return
+    * @returns {Object} array of result repos
+    * client.listAll.then(repos => {
+    *   console.log("All projects known are", repos);
+    * });
+    */
+    CodeGovAPIClient.prototype.listAll = function (size) {
+        if (size === void 0) { size = 10; }
+        var url = this.BASE + ("repos?size=" + size + "&api_key=" + this.API_KEY);
+        if (this.DEBUG)
+            console.log("get all repos url:", url);
+        return fetch(url).then(function (response) { return response.json(); });
     };
     return CodeGovAPIClient;
 }());
