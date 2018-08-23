@@ -18,9 +18,6 @@ jobs:
           key: code-gov-api-client-{{ checksum "package.json" }}
           paths:
             - code-gov-api-client/node_modules
-      - run:
-          name: Run Linter
-          command: npm run lint
   test:
     working_directory: ~/code-gov
     docker:
